@@ -40,6 +40,12 @@ docker compose build
 docker buildx build --builder remote --progress=plain -t nokrndocker:dev --load .
 ```
 
+`main` 分支构建出的镜像会发布到 GHCR：
+
+```bash
+docker pull ghcr.io/muelnova/nokrndocker:latest
+```
+
 ## 启动 Shell
 
 把当前仓库挂载到 `/workspace` 并进入容器：

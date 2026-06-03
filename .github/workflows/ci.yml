@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose
+        run: |
+          docker compose config
+          docker compose -f docker-compose.yml -f docker-compose.kvm.yml config
+
+      - name: Check shell scripts
+        run: |
+          for script in scripts/*.sh; do
+            bash -n "$script"
+          done
+
+      - name: Check Python helpers
+        run: |
+          python3 -m py_compile scripts/helper.py
+          scripts/helper.py --help
+
+      - name: Smoke test rootfs helpers
+        run: |
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+
+          mkdir -p "$tmpdir/fs/bin"
+          printf '#!/bin/sh\necho init\n' > "$tmpdir/fs/init"
+          chmod +x "$tmpdir/fs/init"
+
+          scripts/compress-fs.sh "$tmpdir/fs" "$tmpdir/rootfs.cpio.gz"
+          scripts/extract-fs.sh "$tmpdir/rootfs.cpio.gz" "$tmpdir/out"
+          test -x "$tmpdir/out/init"

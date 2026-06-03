@@ -40,6 +40,12 @@ Or build it directly with buildx:
 docker buildx build --builder remote --progress=plain -t nokrndocker:dev --load .
 ```
 
+Images built from `main` are published to GHCR:
+
+```bash
+docker pull ghcr.io/muelnova/nokrndocker:latest
+```
+
 ## Start A Shell
 
 Open a shell with the current repository mounted as `/workspace`:
