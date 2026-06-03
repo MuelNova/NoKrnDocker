@@ -46,6 +46,45 @@ docker buildx build --builder remote --progress=plain -t nokrndocker:dev --load 
 docker pull ghcr.io/muelnova/nokrndocker:latest
 ```
 
+## 无需 Compose 运行
+
+直接使用发布的镜像：
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 1234:1234 \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
+使用其他宿主机 GDB 端口：
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 31337:1234 \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
+启用 KVM：
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 1234:1234 \
+  --device /dev/kvm:/dev/kvm \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
 ## 启动 Shell
 
 把当前仓库挂载到 `/workspace` 并进入容器：

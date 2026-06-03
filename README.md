@@ -46,6 +46,45 @@ Images built from `main` are published to GHCR:
 docker pull ghcr.io/muelnova/nokrndocker:latest
 ```
 
+## Run Without Compose
+
+Use the published image directly:
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 1234:1234 \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
+Use another host GDB port:
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 31337:1234 \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
+Enable KVM:
+
+```bash
+docker run --rm -it \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  -p 1234:1234 \
+  --device /dev/kvm:/dev/kvm \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  ghcr.io/muelnova/nokrndocker:latest
+```
+
 ## Start A Shell
 
 Open a shell with the current repository mounted as `/workspace`:
