@@ -1,0 +1,4 @@
+services:
+  shell:
+    devices:
+      - ${KVM_DEVICE:-/dev/kvm}:${KVM_DEVICE:-/dev/kvm}

@@ -1,0 +1,18 @@
+services:
+  shell:
+    build:
+      context: .
+    image: nokrndocker:dev
+    working_dir: /workspace
+    volumes:
+      - type: bind
+        source: ${WORKSPACE:-.}
+        target: /workspace
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - "${GDB_PORT:-1234}:1234"
+    stdin_open: true
+    tty: true
